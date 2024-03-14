@@ -1,8 +1,6 @@
 package chess;
 
 
-import javax.swing.border.Border;
-
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
