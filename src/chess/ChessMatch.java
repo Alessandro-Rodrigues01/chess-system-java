@@ -14,7 +14,6 @@ import chess.pieces.Knight;
 import chess.pieces.Pawn;
 import chess.pieces.Queen;
 import chess.pieces.Rook;
-import jdk.internal.icu.text.Replaceable;
 
 public class ChessMatch {
 	private int turn;
@@ -52,17 +51,14 @@ public class ChessMatch {
 		return checkmate;
 
 	}
+
 	public ChessPiece getPromoted() {
 		return promoted;
 	}
 
-	
-
 	public ChessPiece getEnPassantVulnerable() {
 		return enPassantVulnerable;
 	}
-
-	
 
 	public ChessPiece[][] getPieces() {
 		ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
@@ -93,17 +89,18 @@ public class ChessMatch {
 		}
 
 		ChessPiece movedPiece = (ChessPiece) board.piece(target);
-       
-		//#spacialmove promotion
+
+		// #spacialmove promotion
 		promoted = null;
 		if (movedPiece instanceof Pawn) {
-			if (movedPiece.getColor() == Color.WHITE && target.getRow() == 0 ||movedPiece.getColor() == Color.BLACK && target.getRow() == 7) {
-			promoted = (ChessPiece) board.piece(target);
-			promoted = replacePromotedPiece("Q");
+			if (movedPiece.getColor() == Color.WHITE && target.getRow() == 0
+					|| movedPiece.getColor() == Color.BLACK && target.getRow() == 7) {
+				promoted = (ChessPiece) board.piece(target);
+				promoted = replacePromotedPiece("Q");
 			}
-			
+
 		}
-		
+
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
 		if (testCheckMate(currentPlayer)) {
 			checkmate = true;
@@ -125,28 +122,30 @@ public class ChessMatch {
 			throw new IllegalStateException("There is no piece promoted");
 		}
 		if (!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")) {
-			throw new InvalidParameterException("Invalid type for promotion");	
+			throw new InvalidParameterException("Invalid type for promotion");
 		}
 		Position pos = promoted.getChessPosition().toPosition();
-	    Piece p = board.removePiece(pos);
+		Piece p = board.removePiece(pos);
 		piecesOnTheBoard.remove(p);
-		
+
 		ChessPiece newPiece = newPiece(type, promoted.getColor());
 		board.placePiece(newPiece, pos);
 		piecesOnTheBoard.add(newPiece);
 		return newPiece;
-		
-		
-		
+
 	}
+
 	private ChessPiece newPiece(String type, Color color) {
-		if (type.equals("B")) return new Bishop(board, color);
-		if (type.equals("N")) return new Knight(board, color);
-		if (type.equals("Q")) return new Queen (board, color);
+		if (type.equals("B"))
+			return new Bishop(board, color);
+		if (type.equals("N"))
+			return new Knight(board, color);
+		if (type.equals("Q"))
+			return new Queen(board, color);
 		return new Rook(board, color);
-		
+
 	}
-	
+
 	private Piece makeMove(Position source, Position target) {
 		ChessPiece p = (ChessPiece) board.removePiece(source);
 		p.incrementMoveCount();
